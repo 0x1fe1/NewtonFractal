@@ -11,18 +11,19 @@ const delta = 1 / 60
 //#endregion
 
 //#region // *** Variables *** //
-// const n = new Newton(p)
 
 // const z = new Complex(0, 1)
 // z.print('z:')
 // const w = new Complex(0, 1)
 // w.print('w:')
 
-let p = new Polynomial([0, 0, 0, 0])
-// let p = new Polynomial(new Array(6).fill().map(() => round(random(-1, 1), 3)))
+// let p = new Polynomial([-4, 0, 1])
+const p = new Polynomial(new Array(10).fill().map(() => round(random([random(-1, 1), 0]), 3)))
 p.print('p:')
 
-const plane = new Plane({ x: 0, y: 0 }, { x: width, y: height }, { x: 5, y: 5 })
+const n = new Newton(p)
+
+const plane = new Plane({ x: 0, y: 0 }, { x: width, y: height }, { x: 4, y: 4 })
 //#endregion
 
 //#region // *** Setup *** //
@@ -34,7 +35,7 @@ function setup() {
 
 //#region // *** Update *** //
 function update(t) {
-	p.c = p.c.map((c, i) => c + getNoise(t, i, c) * 0.001)
+	// p.c = p.c.map((c, i) => c + getNoise(t, i, c) * 0.001)
 }
 //#endregion
 
@@ -52,6 +53,6 @@ setup()
 function loop() {
 	update((time += delta))
 	render()
-	;(doLoop && setTimeout(loop, delta * 1000)) || console.log(`%c${'loop ended'}`, 'font-size: 1rem; color: lightblue')
+		; (doLoop && setTimeout(loop, delta * 1000)) || console.log(`%c${'loop ended'}`, 'font-size: 1rem; color: lightblue')
 }
 //#endregion

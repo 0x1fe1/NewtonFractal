@@ -10,7 +10,7 @@ class Plane {
 		const points = []
 		for (let x = -this.dim.x; x < this.dim.x; x += step) {
 			const y = p.eval(x)
-			if (abs(y) > this.dim.y) continue
+			// if (abs(y) > this.dim.y) continue
 			points.push({ x: x / 2, y: y / 2 })
 		}
 		stroke('lightgreen')
@@ -56,7 +56,7 @@ class Plane {
 			for (let dx = 0; dx < 1; dx += 0.5) {
 				const screenDX = screenX + dx * xStep
 
-				strokeWidth(0.5)
+				strokeWidth(0.25)
 				line(screenDX, this.pos.y - this.size.y / 2, screenDX, this.pos.y + this.size.y / 2)
 				line(-screenDX, this.pos.y - this.size.y / 2, -screenDX, this.pos.y + this.size.y / 2)
 			}
@@ -81,7 +81,7 @@ class Plane {
 			for (let dy = 0; dy < 1; dy += 0.5) {
 				const screenDY = screenY + dy * yStep
 
-				strokeWidth(0.5)
+				strokeWidth(0.25)
 				line(this.pos.x - this.size.x / 2, screenDY, this.pos.x + this.size.x / 2, screenDY)
 				line(this.pos.x - this.size.x / 2, -screenDY, this.pos.x + this.size.x / 2, -screenDY)
 			}
