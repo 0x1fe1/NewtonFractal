@@ -4,8 +4,16 @@ class Complex {
 		this.b = b
 	}
 
+	getMagSq() {
+	    return this.a ** 2 + this.b ** 2
+	}
+
+	getMag() {
+	    return sqrt(this.a ** 2 + this.b ** 2)
+	}
+
 	getPolar() {
-		const r = sqrt(this.a ** 2 + this.b ** 2)
+		const r = this.getMag()
 		const t = atan2(this.a, this.b) // angle Theta
 		return [r, t]
 	}
@@ -46,7 +54,7 @@ class Complex {
 
 		const w = z.getInverse()
 		this.a = round(this.a * w.a - this.b * w.b, 9)
-		this.b = round(this.a * w.d + this.b * w.a, 9)
+		this.b = round(this.a * w.b + this.b * w.a, 9)
 		return this
 	}
 
@@ -72,6 +80,14 @@ class Complex {
 		const output = `${this.a} + ${this.b === 1 ? '' : this.b + '*'}i `
 		console.log(`%c${input} ${output}`, 'font-size: 1rem; color: lightSeaGreen')
 		console.log(this)
+	}
+
+	isNaN() {
+	    return isNaN(this.a) || isNaN(this.b)
+	}
+
+	round(p = 3) {
+	    return new Complex(round(this.a, p), round(this.b, p))
 	}
 
 	copy() {

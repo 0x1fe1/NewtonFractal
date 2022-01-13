@@ -9,16 +9,37 @@ class Newton {
 	}
 
 	eval(x) {
-		const numSteps = 100
-		const steps = []
-		let output = x
-		for (let i = 0; i < numSteps; i++) {
-			const step = this.p.eval(output) / this.dp.eval(output)
-			steps.push(step)
-			output = output - step
+	    const numSteps = 100
+		return this.getStep(x, numSteps)
+	}
+
+	getStep(x, n) {
+	    if (typeof x === 'number') {
+            const numSteps = n
+            const steps = []
+            let output = x
+            for (let i = 0; i < numSteps; i++) {
+                const step = this.p.eval(output) / this.dp.eval(output)
+                steps.push(step)
+                output -= step
+            }
+            if (abs(output) > plane.dim.x * plane.dim.y) return NaN
+            return round(output, 3)
 		}
-		if (badSteps(steps)) return NaN
-		return round(output, 3)
+
+		if (x instanceof Complex) {
+		    const numSteps = n
+            const steps = []
+            let output = x.copy()
+            for (let i = 0; i < numSteps; i++) {
+                const step = this.p.eval(output).copy().div(this.dp.eval(output))
+                output.sub(step)
+            }
+            if (output.getMag() > plane.dim.x * plane.dim.y) return NaN
+            return output.round(3)
+		}
+
+		return console.error('error in getStep', x, n)
 	}
 
 	getRoots(a, b, c) {
@@ -33,19 +54,4 @@ class Newton {
 		this.roots = tempRoots
 		return this.roots
 	}
-}
-
-
-function badSteps(s) {
-	let out = false
-	const ds = []
-	for (let i = 0; i < s.length-1; i++) {
-		ds.push(s[i+1]-s[i])
-	}
-
-	for (let i = 0; i < ds.length-1; i++) {
-		if (Math.abs(ds[i+1]) > Math.abs(ds[i])) out = true
-	}
-
-	return out
 }

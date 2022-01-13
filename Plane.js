@@ -1,11 +1,13 @@
 class Plane {
-	constructor(center, size, dim) {
+	constructor(center, size, dim, isComplex) {
 		this.pos = center // position of the center of the plane { x, y }
 		this.size = size // screen size { x, y }
 		this.dim = dim // range of values for x-axis and y-axis { x, y }
+		this.isComplex = isComplex
 	}
 
 	graph(p) {
+	    if (this.isComplex) return
 		const step = this.dim.x / this.size.x
 		const points = []
 		for (let x = -this.dim.x; x < this.dim.x; x += step) {
@@ -37,7 +39,8 @@ class Plane {
 		line(screenX1, screenY1, screenX2, screenY2)
 	}
 
-	render(isComplex) {
+	render() {
+	    const isComplex = this.isComplex
 		fill('black')
 		rectMode('CENTER')
 		rect(this.pos.x, this.pos.y, this.size.x, this.size.y)
