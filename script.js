@@ -5,7 +5,7 @@ const width = 800
 const height = 800
 cnv.width = width
 cnv.height = height
-let doLoop = true
+let doLoop = false
 let time = 0
 const delta = 1 / 60
 //#endregion
@@ -17,7 +17,7 @@ const delta = 1 / 60
 // const w = new Complex(0, 1)
 // w.print('w:')
 
-let p = new Polynomial([-1, 0, 0, 1])
+let p = new Polynomial([0, 0, 0, 1])
 //const p = new Polynomial(new Array(10).fill().map(() => round(random([random(-1, 1), 0]), 3)))
 p.print('p:')
 

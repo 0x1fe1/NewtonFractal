@@ -7,18 +7,42 @@ class Plane {
 	}
 
 	graph(p) {
-	    if (this.isComplex) return
-		const step = this.dim.x / this.size.x
-		const points = []
-		for (let x = -this.dim.x; x < this.dim.x; x += step) {
-			const y = p.eval(x)
-			// if (abs(y) > this.dim.y) continue
-			points.push({ x: x / 2, y: y / 2 })
+	    if (!this.isComplex) {
+            const step = this.dim.x / this.size.x
+            const points = []
+            for (let x = -this.dim.x; x < this.dim.x; x += step) {
+                const y = p.eval(x)
+                points.push({ x: x / 2, y: y / 2 })
+            }
+            stroke('lightgreen')
+            strokeWidth(3)
+            for (let i = 0; i < points.length - 1; i++) {
+                this.plotLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y)
+            }
 		}
-		stroke('lightgreen')
-		strokeWidth(3)
-		for (let i = 0; i < points.length - 1; i++) {
-			this.plotLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y)
+
+		if (this.isComplex) {
+		    const step = { x: this.dim.x / this.size.x * 2, y: this.dim.y / this.size.y * 2 }
+            const points = []
+            for (let x = -this.dim.x; x < this.dim.x; x += step.x) {
+                for (let y = -this.dim.y; y < this.dim.y; y += step.x) {
+                    const z = new Complex(x, y)
+                    const w = p.eval(z)
+                    let c = ''
+                    const rSq = z.getMagSq()
+                    c = `hsla(0, 0%, ${rSq / (this.dim.x * this.dim.y) * 100 * 10}%, 1)`
+//                  if (x > 0 && y > 0) c = 'hsla(0, 60%, 60%, 1)'
+//                  if (x > 0 && y < 0) c = 'hsla(90, 60%, 60%, 1)'
+//                  if (x < 0 && y < 0) c = 'hsla(180, 60%, 60%, 1)'
+//                  if (x < 0 && y > 0) c = 'hsla(270, 60%, 60%, 1)'
+                    points.push({ x: w.a, y: w.b, c })
+                }
+            }
+//          fill('hsla(210, 60%, 60%, 1)')
+            for (const p of points) {
+                fill(p.c)
+                this.plotPoint(p.x, p.y, 1)
+            }
 		}
 	}
 
