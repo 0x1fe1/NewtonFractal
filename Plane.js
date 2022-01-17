@@ -7,42 +7,37 @@ class Plane {
 	}
 
 	graph(p) {
-	    if (!this.isComplex) {
-            const step = this.dim.x / this.size.x
-            const points = []
-            for (let x = -this.dim.x; x < this.dim.x; x += step) {
-                const y = p.eval(x)
-                points.push({ x: x / 2, y: y / 2 })
-            }
-            stroke('lightgreen')
-            strokeWidth(3)
-            for (let i = 0; i < points.length - 1; i++) {
-                this.plotLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y)
-            }
+		if (!this.isComplex) {
+			const step = this.dim.x / this.size.x
+			const points = []
+			for (let x = -this.dim.x; x < this.dim.x; x += step) {
+				const y = p.eval(x)
+				points.push({ x: x / 2, y: y / 2 })
+			}
+			stroke('lightgreen')
+			strokeWidth(3)
+			for (let i = 0; i < points.length - 1; i++) {
+				this.plotLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y)
+			}
 		}
 
 		if (this.isComplex) {
-		    const step = { x: this.dim.x / this.size.x * 2, y: this.dim.y / this.size.y * 2 }
-            const points = []
-            for (let x = -this.dim.x; x < this.dim.x; x += step.x) {
-                for (let y = -this.dim.y; y < this.dim.y; y += step.x) {
-                    const z = new Complex(x, y)
-                    const w = p.eval(z)
-                    let c = ''
-                    const rSq = z.getMagSq()
-                    c = `hsla(0, 0%, ${rSq / (this.dim.x * this.dim.y) * 100 * 10}%, 1)`
-//                  if (x > 0 && y > 0) c = 'hsla(0, 60%, 60%, 1)'
-//                  if (x > 0 && y < 0) c = 'hsla(90, 60%, 60%, 1)'
-//                  if (x < 0 && y < 0) c = 'hsla(180, 60%, 60%, 1)'
-//                  if (x < 0 && y > 0) c = 'hsla(270, 60%, 60%, 1)'
-                    points.push({ x: w.a, y: w.b, c })
-                }
-            }
-//          fill('hsla(210, 60%, 60%, 1)')
-            for (const p of points) {
-                fill(p.c)
-                this.plotPoint(p.x, p.y, 1)
-            }
+			const step = { x: (this.dim.x / this.size.x) * 2, y: (this.dim.y / this.size.y) * 2 }
+			const points = []
+			const diagonal = sqrt(this.dim.x ** 2 + this.dim.y ** 2) * 0.5
+			for (let x = -this.dim.x; x < this.dim.x; x += step.x) {
+				for (let y = -this.dim.y; y < this.dim.y; y += step.x) {
+					const z = new Complex(x, y)
+					const w = p.eval(z)
+					const r = abs(z.a * z.b - w.a * w.b)
+					const c = `hsla(${(r / diagonal) * 360}, 60%, 60%, 1)`
+					points.push({ x: w.a, y: w.b, c })
+				}
+			}
+			for (const p of points) {
+				fill(p.c)
+				this.plotPoint(p.x, p.y, 1)
+			}
 		}
 	}
 
@@ -63,14 +58,21 @@ class Plane {
 		line(screenX1, screenY1, screenX2, screenY2)
 	}
 
-	render() {
-	    const isComplex = this.isComplex
+	background() {
 		fill('black')
 		rectMode('CENTER')
 		rect(this.pos.x, this.pos.y, this.size.x, this.size.y)
 		ctx.fill()
+	}
+
+	render() {
+		const isComplex = this.isComplex
 		ctx.font = `1.5rem Fira Code`
 		ctx.textAlign = 'right'
+		const setTextColor = () => {
+			fill('hsla(0, 0%, 80%, 1)')
+			stroke('hsla(0, 0%, 10%, 1)')
+		}
 
 		const xStep = this.size.x / (2 * this.dim.x)
 		const yStep = this.size.y / (2 * this.dim.y)
@@ -92,12 +94,12 @@ class Plane {
 			line(screenX, this.pos.y - this.size.y / 2, screenX, this.pos.y + this.size.y / 2)
 			line(-screenX, this.pos.y - this.size.y / 2, -screenX, this.pos.y + this.size.y / 2)
 
-			fill('hsla(0, 0%, 80%, 1)')
+			setTextColor()
 			text(`${x}`, screenX - 5, -25)
 			text(`${x === 0 ? '' : -x}`, -screenX - 5, -25)
 		}
 
-		fill('hsla(0, 0%, 80%, 1)')
+		setTextColor()
 		text(`${this.dim.x}`, this.pos.y + this.dim.y * yStep - 5, -25)
 
 		for (let y = 0; y < this.dim.y; y++) {
@@ -118,7 +120,7 @@ class Plane {
 			line(this.pos.x - this.size.x / 2, -screenY, this.pos.x + this.size.x / 2, -screenY)
 
 			if (y === 0) continue
-			fill('hsla(0, 0%, 80%, 1)')
+			setTextColor()
 			if (y === 1) {
 				text(`${isComplex ? 'i' : '1'}`, -5, screenY - 25)
 				text(`${isComplex ? '-i' : '-1'}`, -5, -screenY - 25)
@@ -129,7 +131,7 @@ class Plane {
 			}
 		}
 
-		fill('hsla(0, 0%, 80%, 1)')
+		setTextColor()
 		text(`${this.dim.y}${isComplex ? 'i' : ''}`, -5, this.pos.y + this.dim.y * yStep - 25)
 
 		stroke('hsla(0, 0%, 80%, 1)')

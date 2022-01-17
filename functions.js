@@ -30,6 +30,8 @@ function background(c) {
 }
 
 function text(t, x, y) {
+	strokeWidth(3)
+	ctx.strokeText(t, x + translated.x, -y + translated.y)
 	ctx.fillText(t, x + translated.x, -y + translated.y)
 }
 

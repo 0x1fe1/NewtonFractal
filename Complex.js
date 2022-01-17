@@ -5,11 +5,11 @@ class Complex {
 	}
 
 	getMagSq() {
-	    return this.a ** 2 + this.b ** 2
+		return this.a ** 2 + this.b ** 2
 	}
 
 	getMag() {
-	    return sqrt(this.a ** 2 + this.b ** 2)
+		return sqrt(this.a ** 2 + this.b ** 2)
 	}
 
 	getPolar() {
@@ -83,11 +83,11 @@ class Complex {
 	}
 
 	isNaN() {
-	    return isNaN(this.a) || isNaN(this.b)
+		return isNaN(this.a) || isNaN(this.b)
 	}
 
 	round(p = 3) {
-	    return new Complex(round(this.a, p), round(this.b, p))
+		return new Complex(round(this.a, p), round(this.b, p))
 	}
 
 	copy() {
