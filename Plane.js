@@ -8,10 +8,9 @@ class Plane {
 
 	graph(p) {
 		if (!this.isComplex) {
-			const step = this.dim.x / this.size.x
 			const points = []
-			for (let x = -this.dim.x; x < this.dim.x; x += step) {
-				const y = p.eval(x)
+			for (let x = 0; x < this.size.x; x++) {
+				const y = p.eval(Map(x, 0, this.size.x, -this.dim.x, this.dim.x))
 				points.push({ x: x / 2, y: y / 2 })
 			}
 			stroke('lightgreen')
@@ -22,15 +21,19 @@ class Plane {
 		}
 
 		if (this.isComplex) {
-			const step = { x: (this.dim.x / this.size.x) * 2, y: (this.dim.y / this.size.y) * 2 }
 			const points = []
 			const diagonal = sqrt(this.dim.x ** 2 + this.dim.y ** 2) * 0.5
-			for (let x = -this.dim.x; x < this.dim.x; x += step.x) {
-				for (let y = -this.dim.y; y < this.dim.y; y += step.x) {
-					const z = new Complex(x, y)
+			for (let x = 0; x < this.size.x; x++) {
+				for (let y = 0; y < this.size.y; y++) {
+					const z = new Complex(
+					    Map(x, 0, this.size.x, -this.dim.x, this.dim.x),
+					    Map(y, 0, this.size.y, -this.dim.y, this.dim.y)
+					)
 					const w = p.eval(z)
+
 					const r = abs(z.a * z.b - w.a * w.b)
 					const c = `hsla(${(r / diagonal) * 360}, 60%, 60%, 1)`
+
 					points.push({ x: w.a, y: w.b, c })
 				}
 			}
@@ -39,6 +42,32 @@ class Plane {
 				this.plotPoint(p.x, p.y, 1)
 			}
 		}
+	}
+
+	drawNewton(p, numSteps = 3) {
+	    if (!this.isComplex) return console.error('too simple')
+
+	    const n = new Newton(p)
+        const points = []
+        const diagonal = sqrt(this.dim.x ** 2 + this.dim.y ** 2) * 0.5 * 10
+        for (let x = 0; x < this.size.x; x += 1) {
+            for (let y = 0; y < this.size.y; y += 1) {
+                const z = new Complex(
+                    Map(x, 0, this.size.x, -this.dim.x, this.dim.x),
+                    Map(y, 0, this.size.y, -this.dim.y, this.dim.y)
+                )
+                const w = n.getStep(z, numSteps)
+
+                const r = w.getMagSq()
+                const c = `hsla(${(r / diagonal) * 360}, 60%, 60%, 1)`
+
+                points.push({ x: z.a, y: z.b, c })
+            }
+        }
+        for (const p of points) {
+            fill(p.c)
+            this.plotPoint(p.x, p.y, 1)
+        }
 	}
 
 	plotPoint(x, y, r) {

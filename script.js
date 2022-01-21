@@ -17,13 +17,13 @@ const delta = 1 / 60
 // const w = new Complex(0, 1)
 // w.print('w:')
 
-// const p = new Polynomial([0, 0, 0, 1])
+// const p = new Polynomial([0, 1, 0, 3, 0, 5])
 const p = new Polynomial(new Array(10).fill().map(() => round(random([random(-1, 1) * random(10), 0]), 3)))
 p.print('p:')
 
 const n = new Newton(p)
 
-const plane = new Plane({ x: 0, y: 0 }, { x: width, y: height }, { x: 8, y: 8 }, true)
+const plane = new Plane({ x: 0, y: 0 }, { x: width, y: height }, { x: 1, y: 1 }, true)
 //#endregion
 
 //#region // *** Setup *** //
@@ -43,7 +43,8 @@ function render() {
 
 	plane.background()
 	// plane.render()
-	plane.graph(p)
+    //	plane.graph(p)
+    plane.drawNewton(p, 3)
 }
 //#endregion
 

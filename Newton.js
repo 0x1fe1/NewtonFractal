@@ -23,7 +23,7 @@ class Newton {
 				steps.push(step)
 				output -= step
 			}
-			if (abs(output) > plane.dim.x * plane.dim.y) return NaN
+//			if (abs(output) > plane.dim.x * plane.dim.y) return NaN
 			return round(output, 3)
 		}
 
@@ -35,7 +35,7 @@ class Newton {
 				const step = this.p.eval(output).copy().div(this.dp.eval(output))
 				output.sub(step)
 			}
-			if (output.getMag() > plane.dim.x * plane.dim.y) return NaN
+//			if (output.getMag() > plane.dim.x * plane.dim.y) return NaN
 			return output.round(3)
 		}
 
